@@ -22,11 +22,6 @@ services:
     network_mode: "service:wireguard"
     depends_on:
       - wireguard
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Stockholm
-      - TRANSMISSION_WEB_HOME=/transmissionic/
     env_file:
       - ./stack.env
     volumes:
