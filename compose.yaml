@@ -25,7 +25,7 @@ services:
     env_file:
       - ./stack.env
     volumes:
-      - ./transmission-config:/config
-      - ./downloads:/downloads
-      - ./watch:/watch
+      - /data/transmission/config:/config
+      - /data/transmission:/downloads
+      - /data/transmission/watch:/watch
     restart: always
