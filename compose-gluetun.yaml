@@ -1,0 +1,36 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=cLHz+iLM3YW+PRgZcNnEIfiZV5kBUlgADpXu/ErKq0Y=
+      - WIREGUARD_ADDRESSES=10.65.171.200/32
+    ports:
+      - "9091:9091/tcp"
+    volumes:
+      - ./wg0.conf:/config/wg0.conf
+      - /lib/modules:/lib/modules
+    restart: always
+  transmission:
+    image: linuxserver/transmission:version-3.00-r5
+    network_mode: "service:gluetun"
+    depends_on:
+      - wireguard
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+      - TRANSMISSION_WEB_HOME=/transmissionic/
+    env_file:
+      - ./transmission.env
+    volumes:
+      - ./transmission-config:/config
+      - ./downloads:/downloads
+      - ./watch:/watch
+    restart: always
+  curl:
+    image: curlimages/curl
+    network_mode: "service:gluetun"
